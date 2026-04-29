@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Library Management System – Project Report</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 13px;
+    color: #1e293b;
+    background: #f8fafc;
+    line-height: 1.7;
+  }
+
+  /* ── Page wrapper ── */
+  .page {
+    max-width: 860px;
+    margin: 32px auto;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  /* ── Cover ── */
+  .cover {
+    background: linear-gradient(135deg, #1a38c4 0%, #1a56db 100%);
+    color: white;
+    padding: 52px 48px 44px;
+    text-align: center;
+  }
+  .cover .uni { font-size: 12px; opacity: .85; letter-spacing: .5px; text-transform: uppercase; }
+  .cover .dept { font-size: 13px; opacity: .9; margin-top: 4px; }
+  .cover .logo { font-size: 64px; margin: 28px 0 20px; }
+  .cover h1 { font-size: 30px; font-weight: 700; margin-bottom: 8px; }
+  .cover .subtitle { font-size: 15px; opacity: .85; }
+  .cover .meta { margin-top: 36px; display: flex; justify-content: center; gap: 40px; }
+  .cover .meta-item { text-align: center; }
+  .cover .meta-item .label { font-size: 10px; opacity: .7; text-transform: uppercase; letter-spacing: .5px; }
+  .cover .meta-item .value { font-size: 13px; font-weight: 600; margin-top: 2px; }
+
+  /* ── Body content ── */
+  .body { padding: 40px 48px; }
+
+  /* ── Section headings ── */
+  h2 {
+    font-size: 17px; font-weight: 700; color: #1a56db;
+    border-bottom: 2px solid #dbeafe; padding-bottom: 8px;
+    margin: 36px 0 16px;
+  }
+  h3 { font-size: 14px; font-weight: 600; color: #1e293b; margin: 20px 0 10px; }
+
+  p { margin-bottom: 10px; }
+
+  /* ── Tables ── */
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 12.5px; }
+  th {
+    background: #1a56db; color: white; padding: 10px 12px;
+    text-align: left; font-weight: 600; font-size: 12px;
+  }
+  td { padding: 9px 12px; border-bottom: 1px solid #e2e8f0; }
+  tr:nth-child(even) td { background: #f8fafc; }
+  tr:hover td { background: #eff6ff; }
+
+  /* ── Code blocks ── */
+  pre {
+    background: #0f172a; color: #e2e8f0;
+    padding: 16px 20px; border-radius: 6px;
+    font-size: 12px; overflow-x: auto;
+    margin: 12px 0; line-height: 1.6;
+  }
+  code { font-family: 'Consolas', 'Courier New', monospace; }
+  .inline-code {
+    background: #f1f5f9; color: #1a56db;
+    padding: 2px 6px; border-radius: 4px;
+    font-family: 'Consolas', monospace; font-size: 12px;
+  }
+
+  /* ── Badges ── */
+  .badge {
+    display: inline-block; padding: 2px 8px; border-radius: 20px;
+    font-size: 11px; font-weight: 600;
+  }
+  .badge-blue   { background: #dbeafe; color: #1e40af; }
+  .badge-green  { background: #d1fae5; color: #065f46; }
+  .badge-amber  { background: #fef3c7; color: #92400e; }
+  .badge-red    { background: #fee2e2; color: #991b1b; }
+
+  /* ── Requirement cards ── */
+  .req-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .req-card {
+    border: 1px solid #e2e8f0; border-radius: 6px;
+    padding: 14px 16px; background: #fff;
+  }
+  .req-card .req-num {
+    font-size: 10px; font-weight: 700; color: #1a56db;
+    text-transform: uppercase; letter-spacing: .5px;
+  }
+  .req-card .req-title { font-weight: 600; margin: 4px 0 6px; font-size: 13px; }
+  .req-card .req-desc  { font-size: 12px; color: #64748b; }
+
+  /* ── Package / class tree ── */
+  .tree { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px;
+          padding: 16px 20px; font-family: 'Consolas', monospace; font-size: 12px;
+          line-height: 1.9; color: #334155; }
+  .tree .dir  { color: #1a56db; font-weight: 700; }
+  .tree .file { color: #059669; }
+  .tree .pkg  { color: #7c3aed; }
+
+  /* ── Step boxes ── */
+  .step {
+    display: flex; gap: 14px; align-items: flex-start;
+    background: #f8fafc; border-radius: 6px;
+    padding: 14px 16px; margin: 10px 0;
+    border-left: 4px solid #1a56db;
+  }
+  .step-num {
+    min-width: 28px; height: 28px; background: #1a56db; color: white;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 13px;
+  }
+  .step-body .step-title { font-weight: 600; margin-bottom: 4px; }
+  .step-body .step-desc  { font-size: 12px; color: #64748b; }
+
+  /* ── Credentials box ── */
+  .cred-box {
+    background: #1e293b; color: #e2e8f0; border-radius: 8px;
+    padding: 20px 24px; margin: 14px 0; font-family: 'Consolas', monospace;
+  }
+  .cred-box .cred-row { display: flex; gap: 24px; margin: 6px 0; }
+  .cred-box .cred-label { color: #94a3b8; min-width: 90px; }
+  .cred-box .cred-val   { color: #34d399; }
+
+  /* ── Footer ── */
+  .footer {
+    background: #f1f5f9; border-top: 1px solid #e2e8f0;
+    padding: 20px 48px; text-align: center;
+    color: #64748b; font-size: 12px;
+  }
+
+  /* ── Print ── */
+  @media print {
+    body { background: white; }
+    .page { margin: 0; border: none; border-radius: 0; box-shadow: none; }
+    h2 { page-break-after: avoid; }
+    pre, table { page-break-inside: avoid; }
+    .cover { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    th     { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ══ COVER PAGE ══════════════════════════════════════════════════════ -->
+  <div class="cover">
+    <div class="uni">Mehran University of Engineering and Technology</div>
+    <div class="dept">Shaheed Zulfiqar Ali Bhutto Campus, Khairpur Mir's</div>
+    <div class="logo">📚</div>
+    <h1>Library Management System</h1>
+    <div class="subtitle">Course: SW121 – Object Oriented Programming &nbsp;|&nbsp; Complex Engineering Problem</div>
+    <div class="meta">
+      <div class="meta-item"><div class="label">Batch</div><div class="value">K25SW</div></div>
+      <div class="meta-item"><div class="label">Technology</div><div class="value">Java Swing + MySQL</div></div>
+      <div class="meta-item"><div class="label">Instructor</div><div class="value">Engr. Asmatullah Zubair</div></div>
+      <div class="meta-item"><div class="label">Due Date</div><div class="value">30 April 2026</div></div>
+    </div>
+  </div>
+
+  <!-- ══ BODY ═══════════════════════════════════════════════════════════ -->
+  <div class="body">
+
+    <!-- 1. Introduction -->
+    <h2>1. Introduction</h2>
+    <p>This project presents a fully-featured <strong>Library Management System</strong> built as the OOP Complex Engineering Problem for course SW121. The application is developed using <strong>Java Swing</strong> for the graphical user interface and <strong>MySQL</strong> as the backend relational database, connected via JDBC.</p>
+    <p>The system enables library staff to manage books, members, and book issue/return transactions through a clean, role-based interface supporting both Admin and standard User roles.</p>
+
+    <!-- 2. Requirements Coverage -->
+    <h2>2. Requirements Coverage</h2>
+    <div class="req-grid">
+      <div class="req-card">
+        <div class="req-num">Req 1</div>
+        <div class="req-title">Login / Authentication</div>
+        <div class="req-desc">LoginFrame with Admin and User roles. Credentials validated against MySQL <span class="inline-code">users</span> table via UserDAO.</div>
+      </div>
+      <div class="req-card">
+        <div class="req-num">Req 2</div>
+        <div class="req-title">CRUD Operations</div>
+        <div class="req-desc">Full Create / Read / Update / Delete on Books, Members, IssuedBooks, and Users through dedicated DAO classes.</div>
+      </div>
+      <div class="req-card">
+        <div class="req-num">Req 3</div>
+        <div class="req-title">Search &amp; Filter</div>
+        <div class="req-desc">Live keyword search on every panel using SQL <span class="inline-code">LIKE</span> queries. Category filter dropdown on Books panel. Status filter on Issue panel.</div>
+      </div>
+      <div class="req-card">
+        <div class="req-num">Req 4</div>
+        <div class="req-title">Data Validation</div>
+        <div class="req-desc">Validator utility class performs UI-level checks (empty fields, email/phone format, year range). Database-level constraints via FK, UNIQUE, and NOT NULL.</div>
+      </div>
+      <div class="req-card">
+        <div class="req-num">Req 5</div>
+        <div class="req-title">Reports Generation</div>
+        <div class="req-desc">ReportsPanel displays issue history with filter. Print button uses <span class="inline-code">JTable.print()</span> with header/footer for direct printer output.</div>
+      </div>
+      <div class="req-card">
+        <div class="req-num">Req 6</div>
+        <div class="req-title">Attractive GUI</div>
+        <div class="req-desc">UITheme utility provides a consistent blue/dark-sidebar design with rounded buttons, alternating table rows, gradient panels, and card layouts.</div>
+      </div>
+      <div class="req-card">
+        <div class="req-num">Req 7</div>
+        <div class="req-title">Database Connectivity</div>
+        <div class="req-desc">DBConnection singleton manages JDBC connection to MySQL. All queries use PreparedStatement to prevent SQL injection.</div>
+      </div>
+      <div class="req-card">
+        <div class="req-num">Req 8</div>
+        <div class="req-title">Modular Code Design</div>
+        <div class="req-desc">Clean MVC-like package separation: <span class="inline-code">models/</span>, <span class="inline-code">dao/</span>, <span class="inline-code">ui/</span>, <span class="inline-code">utils/</span>, <span class="inline-code">database/</span>. Every class has Javadoc comments.</div>
+      </div>
+    </div>
+
+    <!-- 3. Project Structure -->
+    <h2>3. Project Structure</h2>
+    <div class="tree">
+      <span class="dir">LibraryMS/</span><br>
+      ├── <span class="dir">database/</span><br>
+      │   └── <span class="file">library_schema.sql</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; — MySQL schema &amp; seed data<br>
+      └── <span class="dir">src/</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">Main.java</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; — Application entry point<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;├── <span class="pkg">database/</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;│   └── <span class="file">DBConnection.java</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; — JDBC singleton connection<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;├── <span class="pkg">models/</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;│   ├── <span class="file">User.java</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;│   ├── <span class="file">Book.java</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;│   ├── <span class="file">Member.java</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;│   └── <span class="file">IssuedBook.java</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;├── <span class="pkg">dao/</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;│   ├── <span class="file">UserDAO.java</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; — Auth, user CRUD<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;│   ├── <span class="file">BookDAO.java</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;— Book CRUD + search<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;│   ├── <span class="file">MemberDAO.java</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; — Member CRUD + search<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;│   └── <span class="file">IssueDAO.java</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; — Issue/return transactions<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;├── <span class="pkg">ui/</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;│   ├── <span class="file">LoginFrame.java</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;— Login screen<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;│   ├── <span class="file">MainFrame.java</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; — Dashboard shell + sidebar<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;│   ├── <span class="file">DashboardPanel.java</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;— Stats overview<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;│   ├── <span class="file">BooksPanel.java</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;— Book management<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;│   ├── <span class="file">MembersPanel.java</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;— Member management<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;│   ├── <span class="file">IssuePanel.java</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;— Issue &amp; return<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;│   ├── <span class="file">ReportsPanel.java</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;— History &amp; print<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;│   └── <span class="file">UserManagementPanel.java</span> — Admin user management<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;└── <span class="pkg">utils/</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">UITheme.java</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;— Colors, fonts, styled components<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── <span class="file">Validator.java</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;— Input validation helpers
+    </div>
+
+    <!-- 4. Database Schema -->
+    <h2>4. Database Schema</h2>
+    <table>
+      <tr><th>Table</th><th>Primary Key</th><th>Key Columns</th><th>Purpose</th></tr>
+      <tr><td><span class="inline-code">users</span></td><td>user_id</td><td>username, password, role</td><td>App login accounts</td></tr>
+      <tr><td><span class="inline-code">books</span></td><td>book_id</td><td>title, author, isbn, available_copies</td><td>Library catalogue</td></tr>
+      <tr><td><span class="inline-code">members</span></td><td>member_id</td><td>name, email, phone, status</td><td>Library members</td></tr>
+      <tr><td><span class="inline-code">issued_books</span></td><td>issue_id</td><td>book_id (FK), member_id (FK), due_date, fine_amount</td><td>Issue transactions</td></tr>
+    </table>
+
+    <!-- 5. Installation -->
+    <h2>5. Installation &amp; Setup</h2>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Install Prerequisites</div>
+        <div class="step-desc">Ensure <strong>JDK 17+</strong>, <strong>MySQL 8+</strong>, and <strong>NetBeans / IntelliJ IDEA</strong> are installed on your machine.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Create the Database</div>
+        <div class="step-desc">Open MySQL Workbench or the MySQL CLI and run the provided SQL file:<br>
+          <code style="font-size:12px; color:#1a56db;">source LibraryMS/database/library_schema.sql;</code><br>
+          This creates the <span class="inline-code">library_db</span> database, all tables, and sample data.
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Add MySQL JDBC Driver</div>
+        <div class="step-desc">Download <strong>mysql-connector-j-8.x.jar</strong> from <em>dev.mysql.com/downloads/connector/j/</em>. In NetBeans: right-click project → Properties → Libraries → Add JAR/Folder.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">Configure DB Credentials</div>
+        <div class="step-desc">Open <span class="inline-code">src/database/DBConnection.java</span> and update <span class="inline-code">USER</span> and <span class="inline-code">PASSWORD</span> to match your MySQL installation.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <div class="step-title">Build &amp; Run</div>
+        <div class="step-desc">Open the project in NetBeans → Clean and Build → Run <span class="inline-code">Main.java</span>. The Login screen appears.</div>
+      </div>
+    </div>
+
+    <!-- 6. Login Credentials -->
+    <h2>6. Default Login Credentials</h2>
+    <div class="cred-box">
+      <div style="color:#94a3b8; font-size:11px; margin-bottom:10px;">── Admin Account ──────────────────────────</div>
+      <div class="cred-row"><span class="cred-label">Username:</span><span class="cred-val">admin</span></div>
+      <div class="cred-row"><span class="cred-label">Password:</span><span class="cred-val">admin123</span></div>
+      <div class="cred-row"><span class="cred-label">Access:</span><span style="color:#fbbf24;">Full access including User Management</span></div>
+      <div style="color:#94a3b8; font-size:11px; margin: 12px 0 10px;">── Standard User Account ───────────────────</div>
+      <div class="cred-row"><span class="cred-label">Username:</span><span class="cred-val">librarian</span></div>
+      <div class="cred-row"><span class="cred-label">Password:</span><span class="cred-val">user123</span></div>
+      <div class="cred-row"><span class="cred-label">Access:</span><span style="color:#fbbf24;">Books, Members, Issue/Return, Reports</span></div>
+    </div>
+
+    <!-- 7. Features -->
+    <h2>7. Application Features</h2>
+    <table>
+      <tr><th>Panel</th><th>Features</th><th>Role</th></tr>
+      <tr><td><strong>Login</strong></td><td>Credential validation, role detection, Enter-key support</td><td>All</td></tr>
+      <tr><td><strong>Dashboard</strong></td><td>Live stats cards (books, members, issued today, overdue), quick guide</td><td>All</td></tr>
+      <tr><td><strong>Books</strong></td><td>Add / Edit / Delete books, keyword search, category filter</td><td>All (Delete: Admin)</td></tr>
+      <tr><td><strong>Members</strong></td><td>Add / Edit / Delete members, keyword search</td><td>All (Delete: Admin)</td></tr>
+      <tr><td><strong>Issue / Return</strong></td><td>Issue book to member, return with auto fine calculation (Rs 5/day)</td><td>All</td></tr>
+      <tr><td><strong>Reports</strong></td><td>Full issue history, status filter, print report via JTable.print()</td><td>All</td></tr>
+      <tr><td><strong>User Mgmt</strong></td><td>Add / Delete system login accounts, role assignment</td><td>Admin only</td></tr>
+    </table>
+
+    <!-- 8. OOP Concepts Used -->
+    <h2>8. OOP Concepts Applied</h2>
+    <table>
+      <tr><th>Concept</th><th>Where Applied</th></tr>
+      <tr><td><strong>Encapsulation</strong></td><td>All Model classes (User, Book, Member, IssuedBook) use private fields with getters/setters</td></tr>
+      <tr><td><strong>Abstraction</strong></td><td>DAO classes abstract all SQL from the UI; UITheme abstracts styling</td></tr>
+      <tr><td><strong>Inheritance</strong></td><td>All panels extend <span class="inline-code">JPanel</span>; LoginFrame &amp; MainFrame extend <span class="inline-code">JFrame</span></td></tr>
+      <tr><td><strong>Polymorphism</strong></td><td>Custom <span class="inline-code">paintComponent()</span> overrides in buttons &amp; table cell renderers</td></tr>
+      <tr><td><strong>Singleton</strong></td><td>DBConnection uses Singleton pattern for single shared DB connection</td></tr>
+    </table>
+
+    <!-- 9. Rubric Alignment -->
+    <h2>9. Rubric Alignment</h2>
+    <table>
+      <tr><th>Rubric</th><th>Proficient Level Achieved Through</th></tr>
+      <tr><td><span class="badge badge-green">R1 – Defining the Problem</span></td><td>Correctly identifies Library Management as the domain; models all 4 core entities (Users, Books, Members, Issues) and their relationships</td></tr>
+      <tr><td><span class="badge badge-blue">R2 – Completeness &amp; Accuracy</span></td><td>All 8 functional requirements implemented with correct SQL queries, validation, and UI feedback</td></tr>
+      <tr><td><span class="badge badge-amber">R3 – Coding Standards</span></td><td>Consistent naming (camelCase methods, PascalCase classes), Javadoc on every class, PreparedStatement for all DB queries, proper package structure</td></tr>
+      <tr><td><span class="badge badge-red">R4 – Reusability</span></td><td>UITheme, Validator, and DBConnection are fully reusable utilities; DAO pattern separates data logic for reuse across panels</td></tr>
+    </table>
+
+    <!-- 10. GitHub / Video -->
+    <h2>10. Deliverables</h2>
+    <table>
+      <tr><th>Deliverable</th><th>Link / Location</th></tr>
+      <tr><td>📂 GitHub Source Code</td><td><em style="color:#1a56db;">[Add your GitHub link here after uploading]</em></td></tr>
+      <tr><td>🎥 Demo Video (G-Drive)</td><td><em style="color:#1a56db;">[Add your Google Drive video link here]</em></td></tr>
+      <tr><td>📄 Project Report</td><td>This document (PDF)</td></tr>
+    </table>
+
+  </div><!-- end .body -->
+
+  <!-- ══ FOOTER ══════════════════════════════════════════════════════════ -->
+  <div class="footer">
+    Library Management System &nbsp;·&nbsp; SW121 OOP Project &nbsp;·&nbsp; Batch K25SW &nbsp;·&nbsp;
+    Mehran University of Engineering and Technology
+  </div>
+
+</div><!-- end .page -->
+</body>
+</html>
